@@ -38,17 +38,14 @@
 		<node id="node_prepare">
 			<job id="prepare"/>
 			<sources>
-				<source id="slave" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">http://catalogue.terradue.int/catalogue/search/ASA_IM__0P/ASA_IM__0CNPDE20100502_175016_000000172089_00084_42723_0354.N1/rdf</source>
+				<source id="slave" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">https://data.terradue.com/gs/catalogue/tepqw/gtfeature/search?uid=S1A_IW_GRDH_1SDV_20150305T051939_20150305T052004_004892_006196_B6ED;https://data.terradue.com/gs/catalogue/tepqw/gtfeature/search?uid=S1A_IW_RAW__0SDV_20150303T053527_20150303T053559_004863_0060F7_124C</source>
+				<!--source id="slave" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">/tmp/S1A_IW_GRDH_1SDV_20150305T051939_20150305T052004_004892_006196_B6ED.zip;/tmp/S1A_IW_RAW__0SDV_20150303T053527_20150303T053559_004863_0060F7_124C.zip</source-->				
 			</sources>
-			<parameters>
-				<parameter id="master" scope="runtime">http://catalogue.terradue.int/catalogue/search/ASA_IM__0P/ASA_IM__0CNPDE20100328_175019_000000162088_00084_42222_9504.N1/rdf</parameter>
-				<parameter id="slave" scope="runtime">http://catalogue.terradue.int/catalogue/search/ASA_IM__0P/ASA_IM__0CNPDE20100328_175019_000000162088_00084_42222_9504.N1/rdf</parameter>
-			</parameters>
 		</node>
 		<node id="node_dem">
 			<job id="dem"/>
 			<sources>
-				<source id="Level0_ref" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">http://eo-virtual-archive4.esa.int/search/ASA_IM__0P/ASA_IM__0CNPDE20100328_175004_000000162088_00084_42222_9504.N1/rdf</source>
+				<source id="Level0_ref" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">https://data.terradue.com/gs/catalogue/tepqw/gtfeature/search?uid=S1A_IW_GRDH_1SDV_20150305T051939_20150305T052004_004892_006196_B6ED</source>
 			</sources>
 			<parameters/>
 		</node>
