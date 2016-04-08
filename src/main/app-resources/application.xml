@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="gmtsar">
+	<jobTemplates>
+		<jobTemplate id="node_prepare">
+			<streamingExecutable>/application/node_prepare/run.sh</streamingExecutable>
+			<defaultParameters>
+				<parameter id="Level0_ref" title="Reference to master" abstract="Reference to master product catalogue entry in RDF format">http://catalogue.terradue.int/catalogue/search/ASA_IM__0P/ASA_IM__0CNPDE20100328_175019_000000162088_00084_42222_9504.N1/rdf</parameter>
+				<parameter id="aux_catalogue">http://catalogue.terradue.int/catalogue/search</parameter>
+			</defaultParameters>
+			<defaultJobconf>
+				<property id="ciop.job.max.tasks">1</property>
+				<property id="mapred.task.timeout">7200000</property>
+			</defaultJobconf>
+		</jobTemplate>
+	    <jobTemplate id="dem" jobType="wps_client">
+	        <defaultParameters>
+	                <parameter id="format">sentinel-roipac</parameter>
+	        </defaultParameters>
+	        <defaultJobconf>
+	          <property id="ogc.wps.access.point">http://dem.terradue.int:8080/wps/WebProcessingService</property>
+	          <property id="ogc.wps.process.identifier">com.terradue.wps_oozie.process.OozieAbstractAlgorithm</property>
+	          <property id="ogc.wps.storeExecuteResponse">true</property>
+	          <property id="ogc.wps.status">true</property>
+	          <property id="mapred.task.timeout">9900000000</property>
+	          <property id="ciop.job.max.tasks">1</property>
+	        </defaultJobconf>
+	    </jobTemplate>
+		<jobTemplate id="sentinel-roipac">
+			<streamingExecutable>/application/sentinel-roipac/run.sh</streamingExecutable>
+			<defaultParameters/>
+			<defaultJobconf>
+				<property id="mapred.task.timeout">7200000</property>
+			</defaultJobconf>
+		</jobTemplate>
+	</jobTemplates>
+	<workflow id="sentinel-roipac" title="Sentinel-1 ROI_PAC interferometric processor" abstract="This service provides interferometric processing of Sentinel-1 TOPS data using ROI_PAC. This tool is open source (GNU General Public License). ROI_PAC is copyrighted software that requires a license. Licenses are available at no charge for non-commercial use from the Open Channel Foundation. Read the license terms.">
+		<workflowVersion>1.0</workflowVersion>
+		<node id="node_prepare">
+			<job id="prepare"/>
+			<sources>
+				<source id="slave" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">http://catalogue.terradue.int/catalogue/search/ASA_IM__0P/ASA_IM__0CNPDE20100502_175016_000000172089_00084_42723_0354.N1/rdf</source>
+			</sources>
+			<parameters>
+				<parameter id="master" scope="runtime">http://catalogue.terradue.int/catalogue/search/ASA_IM__0P/ASA_IM__0CNPDE20100328_175019_000000162088_00084_42222_9504.N1/rdf</parameter>
+				<parameter id="slave" scope="runtime">http://catalogue.terradue.int/catalogue/search/ASA_IM__0P/ASA_IM__0CNPDE20100328_175019_000000162088_00084_42222_9504.N1/rdf</parameter>
+			</parameters>
+		</node>
+		<node id="node_dem">
+			<job id="dem"/>
+			<sources>
+				<source id="Level0_ref" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">http://eo-virtual-archive4.esa.int/search/ASA_IM__0P/ASA_IM__0CNPDE20100328_175004_000000162088_00084_42222_9504.N1/rdf</source>
+			</sources>
+			<parameters/>
+		</node>
+		<node id="node_sentinel-roipac">
+			<job id="sentinel-roipac"/>
+			<sources>
+				<source refid="wf:node">node_prepare</source>
+				<source refid="wf:node">node_dem</source>
+			</sources>
+			<parameters/>
+		</node>
+	</workflow>
+</application>
