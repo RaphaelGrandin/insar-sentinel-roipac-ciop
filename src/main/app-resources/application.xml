@@ -38,14 +38,15 @@
 		<node id="node_prepare">
 			<job id="prepare"/>
 			<sources>
-				<source id="slave" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">https://data.terradue.com/gs/catalogue/tepqw/gtfeature/search?uid=S1A_IW_GRDH_1SDV_20150305T051939_20150305T052004_004892_006196_B6ED;https://data.terradue.com/gs/catalogue/tepqw/gtfeature/search?uid=S1A_IW_RAW__0SDV_20150303T053527_20150303T053559_004863_0060F7_124C</source>
-				<!--source id="slave" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">/tmp/S1A_IW_GRDH_1SDV_20150305T051939_20150305T052004_004892_006196_B6ED.zip;/tmp/S1A_IW_RAW__0SDV_20150303T053527_20150303T053559_004863_0060F7_124C.zip</source-->				
+				<!--source id="slave" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">https://data.terradue.com/gs/catalogue/tepqw/gtfeature/search?uid=S1A_IW_GRDH_1SDV_20150305T051939_20150305T052004_004892_006196_B6ED;https://data.terradue.com/gs/catalogue/tepqw/gtfeature/search?uid=S1A_IW_RAW__0SDV_20150303T053527_20150303T053559_004863_0060F7_124C</source-->
+				<source id="slave" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150525T063428_20150525T063455_006074_007DC4_AA49;/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150618T063430_20150618T063457_006424_0087CD_A4B8</source>				
 			</sources>
 		</node>
 		<node id="node_dem">
 			<job id="dem"/>
 			<sources>
-				<source id="Level0_ref" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">https://data.terradue.com/gs/catalogue/tepqw/gtfeature/search?uid=S1A_IW_GRDH_1SDV_20150305T051939_20150305T052004_004892_006196_B6ED</source>
+				<!--source id="Level0_ref" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">https://data.terradue.com/gs/catalogue/tepqw/gtfeature/search?uid=S1A_IW_GRDH_1SDV_20150305T051939_20150305T052004_004892_006196_B6ED</source-->
+				<source id="Level0_ref" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150525T063428_20150525T063455_006074_007DC4_AA49</source>
 			</sources>
 			<parameters/>
 		</node>
