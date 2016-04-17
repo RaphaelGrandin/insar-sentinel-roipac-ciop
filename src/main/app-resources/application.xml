@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="us-ascii"?>
-<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="gmtsar">
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="roipac-sentinel1">
 	<jobTemplates>
 		<jobTemplate id="prepare">
 			<streamingExecutable>/application/node_prepare/run.sh</streamingExecutable>
 			<defaultParameters>
-				<parameter id="Level0_ref" title="Reference to master" abstract="Reference to master product catalogue entry in RDF format">http://catalogue.terradue.int/catalogue/search/ASA_IM__0P/ASA_IM__0CNPDE20100328_175019_000000162088_00084_42222_9504.N1/rdf</parameter>
-				<parameter id="aux_catalogue">http://catalogue.terradue.int/catalogue/search</parameter>
+		      	<parameter id="aux_catalogue">http://catalogue.terradue.int/catalogue/search</parameter>
+		      	<parameter id="slave" title="Sentinel-1 Slave product catalogue entry" abstract="Define the Slave Sentinel-1 product. The product is passed by references to catalogue entries"/>
 			</defaultParameters>
 			<defaultJobconf>
 				<property id="ciop.job.max.tasks">1</property>
@@ -14,7 +14,7 @@
 		</jobTemplate>
 	    <jobTemplate id="dem" jobType="wps_client">
 	        <defaultParameters>
-	                <parameter id="format">sentinel-roipac</parameter>
+	                <parameter id="format">roi_pac</parameter>
 	        </defaultParameters>
 	        <defaultJobconf>
 	          <property id="ogc.wps.access.point">http://dem.terradue.int:8080/wps/WebProcessingService</property>
@@ -38,9 +38,16 @@
 		<node id="node_prepare">
 			<job id="prepare"/>
 			<sources>
+		        <source scope="runtime" id="Level0_ref" title="ASAR Master product catalogue entry" abstract="Define the Master ASAR product. The product is passed by references to catalogue entries " refid="string:list">/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150525T063428_20150525T063455_006074_007DC4_AA49</source>
 				<!--source id="slave" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">https://data.terradue.com/gs/catalogue/tepqw/gtfeature/search?uid=S1A_IW_GRDH_1SDV_20150305T051939_20150305T052004_004892_006196_B6ED;https://data.terradue.com/gs/catalogue/tepqw/gtfeature/search?uid=S1A_IW_RAW__0SDV_20150303T053527_20150303T053559_004863_0060F7_124C</source-->
-				<source id="slave" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150525T063428_20150525T063455_006074_007DC4_AA49;/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150618T063430_20150618T063457_006424_0087CD_A4B8</source>				
+				<!--source scope="runtime" id="sourceFilesMaster" title="Sentinel-1 input (master)" abstract="Comma separated Sentinel-1 inputs in the form of source1;source2;..." refid="string:list">/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150525T063428_20150525T063455_006074_007DC4_AA49</source-->
+				<!--source scope="runtime" id="sourceFilesSlave" title="Sentinel-1 input (slave)" abstract="Comma separated Sentinel-1 inputs in the form of source1;source2;..." refid="string:list">/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150618T063430_20150618T063457_006424_0087CD_A4B8</source-->
+				<!--source scope="runtime" id="polarization" title="Polarization" abstract="VV (default), VH, HH..." refid="string:list">VV</source-->			
+				<!--source scope="runtime" id="swathList" title="Swath list" abstract="Comma separated list of swaths in the form of IW1;IW2;IW3." refid="string:list">IW1;IW2;IW3</source-->			
 			</sources>
+	        <parameters>
+	        	<parameter id="slave" scope="runtime">/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150618T063430_20150618T063457_006424_0087CD_A4B8</parameter>
+	        </parameters>
 		</node>
 		<node id="node_dem">
 			<job id="dem"/>

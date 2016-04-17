@@ -50,6 +50,8 @@ cat > $TMPDIR/input
 
 # create environment
 mkdir -p $TMPDIR/workdir/data $TMPDIR/workdir/dem $TMPDIR/workdir/interf &> /dev/null
+ls $TMPDIR/workdir/interf
+echo $TMPDIR
 
 export DATDIR=$TMPDIR/workdir/data
 export DEMDIR=$TMPDIR/workdir/dem
@@ -57,29 +59,44 @@ export ORBDIR=$TMPDIR/workdir/interf/ORB
 export SLCDIR=$TMPDIR/workdir/interf/SLC
 export INTDIR=$TMPDIR/workdir/interf/INT
 
-# get all SAR products
-for input in `cat $TMPDIR/input | grep 'sar='`
+#main
+while read master
 do
-    sar_url=`echo $input | sed "s/^sar=//"`
-
-    # get the date in format YYMMDD
-    sar_date=`opensearch-client $sar_url startdate | cut -c 3-10 | tr -d "-"`
-    sar_date_short=`echo $sar_date | cut -c 1-4`
-
-    ciop-log "DEBUG" "SAR input ${sar_url}"
-    ciop-log "INFO" "SAR date: $sar_date and $sar_date_short"
-
-    # get the dataset identifier
-    sar_identifier=`opensearch-client $sar_url identifier`
-    ciop-log "INFO" "SAR identifier: $sar_identifier"
-
-    sar_folder=$DATDIR
-	
-    # get Sentinel-1 SAFE products
-    sar_url=`opensearch-client $sar_url enclosure`
-    sar="`ciop-copy -o $sar_folder $sar_url`"
-	
+	ciop-log "INFO" "Master: $master"
+	slave="`ciop-getparam slave`"
+	ciop-log "INFO" "Slave: $slave"
+	#runAux $master
+	#resMaster=$?
+	#[ "$resMaster" -ne 0 ] && exit $resMaster
+	#runAux $slave
+	#resSlave=$?
+	#exit $resSlave
 done
+
+
+# get all SAR products
+# for input in `cat $TMPDIR/input | grep 'sar='`
+# do
+#     sar_url=`echo $input | sed "s/^sar=//"`
+#
+#     # get the date in format YYMMDD
+#     sar_date=`opensearch-client $sar_url startdate | cut -c 3-10 | tr -d "-"`
+#     sar_date_short=`echo $sar_date | cut -c 1-4`
+#
+#     ciop-log "DEBUG" "SAR input ${sar_url}"
+#     ciop-log "INFO" "SAR date: $sar_date and $sar_date_short"
+#
+#     # get the dataset identifier
+#     sar_identifier=`opensearch-client $sar_url identifier`
+#     ciop-log "INFO" "SAR identifier: $sar_identifier"
+#
+#     sar_folder=$DATDIR
+#
+#     # get Sentinel-1 SAFE products
+#     sar_url=`opensearch-client $sar_url enclosure`
+#     sar="`ciop-copy -o $sar_folder $sar_url`"
+#
+# done
 
 ciop-log "INFO" "Import of Sentinel-1 SAFE folder complete."
 

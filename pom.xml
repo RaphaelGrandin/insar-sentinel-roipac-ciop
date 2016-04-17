@@ -7,7 +7,7 @@
 	<artifactId>insar-sentinel-roipac</artifactId>
 	<packaging>rpm</packaging>
 	<name>Sentinel-1-ROI_PAC</name>
-	<description>Sentinel-1-ROI_PAC</description>
+	<description>Sentinel-1 interferometry using ROI_PAC</description>
 	<version>1.0-SNAPSHOT</version>
 
 	<scm>
