@@ -1,30 +1,58 @@
-<?xml version="1.0" encoding="us-ascii"?>
-<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="roipac-sentinel1">
-	<jobTemplates>
-		<jobTemplate id="prepare">
-			<streamingExecutable>/application/node_prepare/run.sh</streamingExecutable>
-			<defaultParameters>
-		      	<parameter id="aux_catalogue">http://catalogue.terradue.int/catalogue/search</parameter>
-		      	<parameter id="slave" title="Sentinel-1 Slave product catalogue entry" abstract="Define the Slave Sentinel-1 product. The product is passed by references to catalogue entries"/>
-			</defaultParameters>
-			<defaultJobconf>
-				<property id="ciop.job.max.tasks">1</property>
-				<property id="mapred.task.timeout">7200000</property>
-			</defaultJobconf>
-		</jobTemplate>
-	    <jobTemplate id="dem" jobType="wps_client">
-	        <defaultParameters>
-	                <parameter id="format">roi_pac</parameter>
-	        </defaultParameters>
-	        <defaultJobconf>
-	          <property id="ogc.wps.access.point">http://dem.terradue.int:8080/wps/WebProcessingService</property>
-	          <property id="ogc.wps.process.identifier">com.terradue.wps_oozie.process.OozieAbstractAlgorithm</property>
-	          <property id="ogc.wps.storeExecuteResponse">true</property>
-	          <property id="ogc.wps.status">true</property>
-	          <property id="mapred.task.timeout">9900000000</property>
-	          <property id="ciop.job.max.tasks">1</property>
-	        </defaultJobconf>
-	    </jobTemplate>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="beam_arithm">
+<jobTemplates>
+<jobTemplate id="template_A">
+<streamingExecutable>/application/template_a/run.sh</streamingExecutable>
+	<defaultParameters>
+		     	<parameter id="aux_catalogue">http://catalogue.terradue.int/catalogue/search</parameter>
+ 		    	<parameter id="slave" title="Sentinel-1 Slave product catalogue entry" abstract="Define the Slave Sentinel-1 product. The product is passed by references to catalogue entries"/>
+ 		    	<parameter id="polarization" title="Polarization" abstract="VV (default), VH...">
+ 		    		<options>
+ 		    	        	<option>VV</option>
+ 		    	        	<option>VH</option>
+                        	        <default>VV</default>
+                       		</options>
+ 		    	</parameter>
+ 		    	<parameter id="swathList" title="Swath list" abstract="Comma separated list of swaths in the form of IW1;IW2;IW3.">
+ 		    		<options>
+ 		    			<option>IW1;IW2;IW3</option>
+ 		    			<option>IW1</option>
+ 		    			<option>IW2</option>
+ 		    			<option>IW3</option>
+ 		    			<default>IW1;IW2;IW3</default>
+ 		    		</options>
+ 		    	</parameter>
+	</defaultParameters>
+<defaultJobconf>
+<property id="mapred.task.timeout">6000000</property>
+</defaultJobconf>
+</jobTemplate>
+<jobTemplate id="template_B">
+<streamingExecutable>/application/template_b/run.sh</streamingExecutable>
+<defaultParameters>
+                        <parameter id="aux_catalogue">http://catalogue.terradue.int/catalogue/search</parameter>
+                        <parameter id="slave" title="Sentinel-1 Slave product catalogue entry" abstract="Define the Slave Sentinel-1 product. The product is passed by references to catalogue entries"/>
+                        <parameter id="polarization" title="Polarization" abstract="VV (default), VH...">
+                       	        <options>
+                       	                <option>VV</option>
+                       	                <option>VH</option>
+                       	                <default>VV</default>
+                       	        </options>
+                        </parameter>
+                        <parameter id="swathList" title="Swath list" abstract="Comma separated list of swaths in the form of IW1;IW2;IW3.">
+                                <options>
+                                        <option>IW1;IW2;IW3</option>
+                                        <option>IW1</option>
+                                        <option>IW2</option>
+                                        <option>IW3</option>
+                                        <default>IW1;IW2;IW3</default>
+                                </options>
+                        </parameter>
+</defaultParameters>
+<defaultJobconf>
+<property id="mapred.task.timeout">120000000</property>
+<property id="ciop.job.max.tasks">1</property>
+</defaultJobconf>
+</jobTemplate>
 		<jobTemplate id="sentinel-roipac">
 			<streamingExecutable>/application/sentinel-roipac/run.sh</streamingExecutable>
 			<defaultParameters/>
@@ -32,38 +60,51 @@
 				<property id="mapred.task.timeout">7200000</property>
 			</defaultJobconf>
 		</jobTemplate>
-	</jobTemplates>
-	<workflow id="sentinel-roipac" title="Sentinel-1 ROI_PAC interferometric processor" abstract="This service provides interferometric processing of Sentinel-1 TOPS data using ROI_PAC. This tool is open source (GNU General Public License). ROI_PAC is copyrighted software that requires a license. Licenses are available at no charge for non-commercial use from the Open Channel Foundation. Read the license terms.">
-		<workflowVersion>1.0</workflowVersion>
-		<node id="node_prepare">
-			<job id="prepare"/>
-			<sources>
-		        <source scope="runtime" id="Level0_ref" title="ASAR Master product catalogue entry" abstract="Define the Master ASAR product. The product is passed by references to catalogue entries " refid="string:list">/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150525T063428_20150525T063455_006074_007DC4_AA49</source>
-				<!--source id="slave" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">https://data.terradue.com/gs/catalogue/tepqw/gtfeature/search?uid=S1A_IW_GRDH_1SDV_20150305T051939_20150305T052004_004892_006196_B6ED;https://data.terradue.com/gs/catalogue/tepqw/gtfeature/search?uid=S1A_IW_RAW__0SDV_20150303T053527_20150303T053559_004863_0060F7_124C</source-->
-				<!--source scope="runtime" id="sourceFilesMaster" title="Sentinel-1 input (master)" abstract="Comma separated Sentinel-1 inputs in the form of source1;source2;..." refid="string:list">/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150525T063428_20150525T063455_006074_007DC4_AA49</source-->
+</jobTemplates>
+<workflow id="myworkflow" title="My workflow" abstract="This is my workflow">
+<workflowVersion>1.0</workflowVersion>
+<node id="node_A">
+<job id="template_A"/>
+<sources>
+				<source scope="test" id="sourceFilesMaster" title="Sentinel-1 input (master)" abstract="Comma separated Sentinel-1 inputs in the form of source1;source2;..." refid="string:list">/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150525T063428_20150525T063455_006074_007DC4_AA49;/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150618T063430_20150618T063457_006424_0087CD_A4B8</source>
 				<!--source scope="runtime" id="sourceFilesSlave" title="Sentinel-1 input (slave)" abstract="Comma separated Sentinel-1 inputs in the form of source1;source2;..." refid="string:list">/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150618T063430_20150618T063457_006424_0087CD_A4B8</source-->
 				<!--source scope="runtime" id="polarization" title="Polarization" abstract="VV (default), VH, HH..." refid="string:list">VV</source-->			
-				<!--source scope="runtime" id="swathList" title="Swath list" abstract="Comma separated list of swaths in the form of IW1;IW2;IW3." refid="string:list">IW1;IW2;IW3</source-->			
-			</sources>
+				<!--source scope="runtime" id="swathList" title="Swath list" abstract="Comma separated list of swaths in the form of IW1;IW2;IW3." refid="string:list">IW1;IW2;IW3</source-->	
+              <!--source refid="file:urls">/application/inputs/list</source-->
+		        <!--source scope="runtime" id="Level0_ref" title="ASAR Master product catalogue entry" abstract="Define the Master ASAR product. The product is passed by references to catalogue entries " refid="string:list">/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150525T063428_20150525T063455_006074_007DC4_AA49</source-->
+<!-- <source refid="file:urls">/tmp/inputs</source> -->
+<!-- <source refid="string:list">input1,input2<source> -->
+<!--
+     <source refid="cas:series">http://localhost/catalogue/sandbox/MER_RR__1P/description</source>
+     -->
+</sources>
+                <!--parameters>
+                           <parameter id="slave" scope="runtime">/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150618T063430_20150618T063457_006424_0087CD_A4B8</parameter>
+                           <parameter id="polarization" scope="runtime" title="Polarization" abstract="VV (default), VH, HH..." refid="string:list">VV</parameter>
+                           <parameter id="swathList" scope="runtime" title="Swath list" abstract="Comma separated list of swaths in the form of IW1;IW2;IW3." refid="string:list">IW1;IW2;IW3</parameter>
+                </parameters-->
+
 	        <parameters>
-	        	<parameter id="slave" scope="runtime">/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150618T063430_20150618T063457_006424_0087CD_A4B8</parameter>
+	    	        	<parameter id="slave" scope="test">/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150618T063430_20150618T063457_006424_0087CD_A4B8;/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150525T063428_20150525T063455_006074_007DC4_AA49</parameter>
 	        </parameters>
-		</node>
-		<node id="node_dem">
-			<job id="dem"/>
-			<sources>
-				<!--source id="Level0_ref" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">https://data.terradue.com/gs/catalogue/tepqw/gtfeature/search?uid=S1A_IW_GRDH_1SDV_20150305T051939_20150305T052004_004892_006196_B6ED</source-->
-				<source id="Level0_ref" title="Sentinel-1 folder in SAFE format" abstract="Name of Sentinel-1 folder in SAFE format" refid="string:list" scope="runtime">/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150525T063428_20150525T063455_006074_007DC4_AA49</source>
-			</sources>
-			<parameters/>
-		</node>
+</node>
+<node id="node_B">
+<job id="template_B"/>
+<sources>
+<source refid="wf:node">node_A</source>
+</sources>
+<parameters>
+<parameter id="slave"></parameter>
+</parameters>
+</node>
 		<node id="node_sentinel-roipac">
 			<job id="sentinel-roipac"/>
 			<sources>
-				<source refid="wf:node">node_prepare</source>
-				<source refid="wf:node">node_dem</source>
+				<source refid="wf:node">node_B</source>
 			</sources>
 			<parameters/>
 		</node>
-	</workflow>
+</workflow>
 </application>
+
+
