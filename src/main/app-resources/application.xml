@@ -29,6 +29,9 @@
 <jobTemplate id="template_B">
 <streamingExecutable>/application/template_b/run.sh</streamingExecutable>
 <defaultParameters>
+	<parameter scope="runtime" id="inputFile" title="Input file (ASCII)" abstract="An input file that describes what the node should do, in the form keyword=value"/>
+</defaultParameters>
+<!--defaultParameters>
                         <parameter id="aux_catalogue">http://catalogue.terradue.int/catalogue/search</parameter>
                         <parameter id="slave" title="Sentinel-1 Slave product catalogue entry" abstract="Define the Slave Sentinel-1 product. The product is passed by references to catalogue entries"/>
                         <parameter id="polarization" title="Polarization" abstract="VV (default), VH...">
@@ -51,7 +54,7 @@
 <defaultJobconf>
 <property id="mapred.task.timeout">120000000</property>
 <property id="ciop.job.max.tasks">1</property>
-</defaultJobconf>
+</defaultJobconf-->
 </jobTemplate>
 		<jobTemplate id="sentinel-roipac">
 			<streamingExecutable>/application/sentinel-roipac/run.sh</streamingExecutable>
@@ -86,6 +89,7 @@
 
 	        <parameters>
 	    	        	<parameter id="slave" scope="test">/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150618T063430_20150618T063457_006424_0087CD_A4B8;/tmp/my_sentinel1_data/S1A_IW_SLC__1SDV_20150525T063428_20150525T063455_006074_007DC4_AA49</parameter>
+	                        <parameter id="swathList" scope="test">IW2;IW1</parameter>
 	        </parameters>
 </node>
 <node id="node_B">

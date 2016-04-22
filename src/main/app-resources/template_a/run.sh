@@ -44,6 +44,8 @@ do
         #echo "polarization=$polarization" | ciop-publish -s
         #echo "swathList=$swathList" | ciop-publish -s
 
+	ciop-log "INFO" "NODE A TMPDIR : $TMPDIR"
+
 	echo "master="$master"" > $TMPDIR/joborder
 	echo "slave="$slave"" >> $TMPDIR/joborder
         echo "polarization="$polarization"" >> $TMPDIR/joborder
