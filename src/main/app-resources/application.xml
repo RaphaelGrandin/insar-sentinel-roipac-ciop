@@ -56,6 +56,19 @@
 <property id="ciop.job.max.tasks">1</property>
 </defaultJobconf-->
 </jobTemplate>
+		<jobTemplate id="dem" jobType="wps_client">
+			<defaultParameters>
+				<parameter id="format">roi_pac</parameter>
+			</defaultParameters>
+			<defaultJobconf>
+				<property id="ogc.wps.access.point">http://dem.terradue.int:8080/wps/WebProcessingService</property>
+				<property id="ogc.wps.process.identifier">com.terradue.wps_oozie.process.OozieAbstractAlgorithm</property>
+				<property id="ogc.wps.storeExecuteResponse">true</property>
+				<property id="ogc.wps.status">true</property>
+				<property id="mapred.task.timeout">9900000000</property>
+				<property id="ciop.job.max.tasks">1</property>
+			</defaultJobconf>
+		</jobTemplate>
 		<jobTemplate id="sentinel-roipac">
 			<streamingExecutable>/application/sentinel-roipac/run.sh</streamingExecutable>
 			<defaultParameters/>
@@ -92,9 +105,17 @@
 	                        <parameter id="swathList" scope="test">IW2;IW1</parameter>
 	        </parameters>
 </node>
+		<node id="node_dem">
+			<job id="dem"/>
+			<sources>
+				<source id="Level0_ref" title="ASAR master product catalogue entry in RDF format" abstract="ASAR master product passed by reference to catalogue entries in RDF format" refid="string:list" scope="runtime">http://eo-virtual-archive4.esa.int/search/ASA_IM__0P/ASA_IM__0CNPDE20100328_175004_000000162088_00084_42222_9504.N1/rdf</source>
+			</sources>
+			<parameters/>
+		</node>
 <node id="node_B">
 <job id="template_B"/>
 <sources>
+<source refid="wf:node">node_dem</source>
 <source refid="wf:node">node_A</source>
 </sources>
 <parameters>
